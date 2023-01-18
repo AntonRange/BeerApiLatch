@@ -1,14 +1,16 @@
-const div = document.querySelector("#tomat") as HTMLDivElement;
+const div = document.querySelector(".EveryBeer") as HTMLDivElement;
 const url = "https://api.punkapi.com/v2/beers";
 
 
 class Beer {
     name: string;
     description: string;
+    image: string;
 
-    constructor(name: string, description: string) {
+    constructor(name: string, description: string, image: string) {
         this.name = name;
         this.description = description;
+        this.image = image;
     }
 }
 
@@ -18,7 +20,7 @@ class BeerList {
     constructor(beersArray: any) {
         this.beers = [];
         for (let i = 0; i < beersArray.length; i++) {
-            this.beers.push(new Beer(beersArray[i].name, beersArray[i].description));
+            this.beers.push(new Beer(beersArray[i].name, beersArray[i].description, beersArray[i].image_url));
         }
     }
 }
@@ -29,6 +31,7 @@ p.then(response => {
 }).then(beerArray => {
     const beerList = new BeerList(beerArray);
     logBeers(beerList);
+    previewABeer(beerList)
 });
 
 function logBeers(beerList: BeerList) {
@@ -44,3 +47,27 @@ function logBeers(beerList: BeerList) {
     console.log(beerList);
 }
 
+
+
+function previewABeer(beerList: BeerList) {
+    const beerPreview = document.querySelector(".BeerPreviewWichOne") as HTMLDivElement;
+
+    const WhatBeer = document.querySelectorAll(".BeerInformation");
+
+    for (let i = 0; i < WhatBeer.length; i++) {
+        WhatBeer[i].addEventListener('click', () => {
+            beerPreview.innerHTML = '';
+            let newPtag = document.createElement("p");
+            let newPtag2 = document.createElement("p");
+            let newImagetag = document.createElement("img");
+            newImagetag.setAttribute("src", beerList.beers[i].image)
+            newPtag.innerHTML = beerList.beers[i].name
+            newPtag2.innerHTML = beerList.beers[i].description
+            beerPreview.append(newPtag,newPtag2, newImagetag);
+        })
+
+
+    }
+
+
+}
